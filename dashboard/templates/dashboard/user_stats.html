@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Χρονοσειρά Εγγραφών Χρηστών</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <style>
+        body { font-family: Arial; }
+        .bar { height: 20px; background: #3498db; margin-bottom: 4px; }
+        .form { margin: 1em 0; }
+    </style>
+</head>
+<body x-data="{ loading: false }">
+
+    <h1>📊 Χρονοσειρά Εγγραφών Χρηστών</h1>
+
+    <div class="form">
+        <form hx-get="/stats/" hx-target="#results" @htmx:before-request="loading = true" @htmx:after-request="loading = false">
+            Από: <input type="date" name="start">
+            Έως: <input type="date" name="end">
+            <button type="submit">Φίλτρο</button>
+        </form>
+    </div>
+
+    <div x-show="loading">Φόρτωση...</div>
+
+    <div id="results" hx-get="/stats/" hx-trigger="load">
+        <!-- The table and chart will load here via JavaScript -->
+    </div>
+
+    <script>
+        document.addEventListener("htmx:afterOnLoad", function(evt) {
+            const data = JSON.parse(evt.detail.xhr.responseText);
+            const container = document.getElementById("results");
+
+            container.innerHTML = `
+                <h2>📅 Πίνακας Εγγραφών</h2>
+                <table border="1" cellpadding="5">
+                    <tr><th>Ημερομηνία</th><th>Εγγραφές</th></tr>
+                    ${data.map(d => `<tr><td>${d.day}</td><td>${d.count}</td></tr>`).join('')}
+                </table>
+
+                <h2>📈 Γραφική Παράσταση</h2>
+                ${data.map(d => `
+                    <div>
+                        <strong>${d.day}</strong>
+                        <div class="bar" style="width: ${d.count * 10}px"></div>
+                    </div>
+                `).join('')}
+            `;
+        });
+    </script>
+
+</body>
+</html>
