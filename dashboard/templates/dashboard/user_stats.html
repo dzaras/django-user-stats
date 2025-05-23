@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
     <meta charset="UTF-8">
     <title>Χρονοσειρά Εγγραφών Χρηστών</title>
@@ -26,13 +26,18 @@
     <div x-show="loading">Φόρτωση...</div>
 
     <div id="results" hx-get="/stats/" hx-trigger="load">
-        <!-- The table and chart will load here via JavaScript -->
+        <!-- Τα αποτελέσματα θα φορτωθούν εδώ -->
     </div>
 
     <script>
         document.addEventListener("htmx:afterOnLoad", function(evt) {
             const data = JSON.parse(evt.detail.xhr.responseText);
             const container = document.getElementById("results");
+
+            if (data.length === 0) {
+                container.innerHTML = "<p>Δεν βρέθηκαν εγγραφές για το επιλεγμένο διάστημα.</p>";
+                return;
+            }
 
             container.innerHTML = `
                 <h2>📅 Πίνακας Εγγραφών</h2>
