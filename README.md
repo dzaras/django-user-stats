@@ -14,9 +14,15 @@
 ## Οδηγίες Εγκατάστασης
 
 1. Δημιουργία και ενεργοποίηση εικονικού περιβάλλοντος:
+
    ```bash
    python -m venv venv
-   venv\Scripts\activate  # Windows
+   # Windows
+   venv\Scripts\activate
+   # Linux / macOS
+   source venv/bin/activate
+   ```
+
 
 2. Εγκατάσταση εξαρτήσεων: `pip install -r requirements.txt`
 
@@ -46,7 +52,7 @@ API (JSON): http://127.0.0.1:8000/stats/
 
 Όλος ο κώδικας ακολουθεί τις βέλτιστες πρακτικές του Django (apps, templates, urls)
 
-## Δομή Φακέλων (ενδεικτικά)
+## Δομή Φακέλων 
 
 userstats/
 ├── dashboard/
